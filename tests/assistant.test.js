@@ -45,3 +45,26 @@ test('Справочные вопросы сохраняют подтвержд�
   assert.match(answer('Как оформить работу? Требования?'),/не подтверждены/);
   assert.match(answer('Когда конференция?'),/7–11 декабря 2026/);
 });
+
+for (const topic of [
+  'Продвижение бренда в цифровых медиа',
+  'Дизайн и журналистика',
+  'PR для студенческого стартапа',
+  'Реклама с помощью нейросетей и дизайн',
+]) test(`Уточнение вместо случайного выбора: ${topic}`,()=>{
+  const result = recommendSection(topic);
+  assert.equal(result.type, 'clarify');
+  assert.ok(result.candidates.length >= 2);
+  assert.match(answer(topic), /Что в центре исследования/);
+  assert.doesNotMatch(answer(topic), /Предварительно рекомендую/);
+});
+for (const question of [
+  'Сколько стоит билет на поезд?',
+  'Как приготовить борщ?',
+  'Расскажи про квантовую физику',
+  'Что такое фотосинтез?',
+]) test(`Неизвестный вопрос: ${question}`,()=>{
+  assert.equal(recommendSection(question).type, 'unknown');
+  assert.match(answer(question), /нет ответа/);
+  assert.doesNotMatch(answer(question), /Предварительно рекомендую/);
+});
