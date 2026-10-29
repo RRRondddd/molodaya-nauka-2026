@@ -22,6 +22,10 @@ try {
       assert.deepEqual(outside, [], `Element overflow at ${width}`);
     };
     await checkBounds();
+    assert.equal(await page.title(),'Young Science 2026 · НГУЭУ');
+    assert.equal(await page.locator('#applications').count(),0);
+    assert.equal(await page.locator('header').evaluate(e=>getComputedStyle(e).position),'sticky');
+    assert.match(await page.getByRole('heading',{level:1}).evaluate(e=>getComputedStyle(e).fontFamily),/Manrope/);
     const surfaces = await page.locator('header, main > section, footer').evaluateAll(elements=>elements.map(el=>({tag:el.id||el.tagName,left:el.getBoundingClientRect().left,width:el.getBoundingClientRect().width})));
     for(const surface of surfaces){assert.ok(Math.abs(surface.left)<1 && Math.abs(surface.width-width)<1,`Background must span viewport: ${surface.tag} at ${width}`);}
     await page.locator('summary').first().click();assert.equal(await page.locator('details').first().getAttribute('open')!==null,true);
@@ -37,7 +41,11 @@ try {
     await page.locator('header nav a').first().focus();
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('header nav').isVisible(), false);
-    }else{assert.equal(await page.locator('header nav').isVisible(),true);await page.locator('header nav a[href="#program"]').click();}
+    }else{assert.equal(await page.locator('header nav').isVisible(),true);}
+    if(width<=768)await page.getByRole('button',{name:'Меню',exact:true}).click();
+    await page.locator('header nav a[href="#program"]').click();
+    await page.waitForFunction(()=>{const y=document.querySelector('#program').getBoundingClientRect().top;const bottom=document.querySelector('header').getBoundingClientRect().bottom;return y>=bottom-1 && y<bottom+50;});
+    assert.ok(await page.locator('header').evaluate(e=>Math.abs(e.getBoundingClientRect().top)<1));
     for (let i=0; i<3; i++) { await page.getByRole('tab').nth(i).click(); await checkBounds(); }
     await page.getByRole('tab').first().click();
     await page.evaluate(()=>scrollTo(0,0));
