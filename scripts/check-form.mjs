@@ -13,7 +13,7 @@ try{
   assert.equal(await page.getByLabel('Email',{exact:true}).evaluate(e=>e===document.activeElement),true);
   await page.keyboard.type('invalid');await button.click();assert.equal(await page.getByLabel('Email',{exact:true}).getAttribute('aria-invalid'),'true');
   await page.getByLabel('Email',{exact:true}).fill('demo@example.test');
-  await page.getByLabel('Научный руководитель',{exact:true}).selectOption('demo-01');
+  await page.getByLabel('Научный руководитель',{exact:true}).selectOption('terenina');
   await page.getByLabel('Секция конференции',{exact:true}).selectOption('section-2');
   await page.getByLabel('Предполагаемая тема исследования').fill('Демонстрационное исследование цифровых медиа');
   await button.click();assert.equal(await page.locator('[name=consent]').getAttribute('aria-invalid'),'true');

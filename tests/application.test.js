@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { validateApplication, submitApplication } from '../src/application.js';
-const data={name:'Тестовый Студент Пример',email:'student@example.test',supervisorId:'demo-01',sectionId:'section-1',topic:'Демонстрационное исследование',consent:true};
+const data={name:'Тестовый Студент Пример',email:'student@example.test',supervisorId:'terenina',sectionId:'section-1',topic:'Демонстрационное исследование',consent:true};
 const config={demo:false,approved:true,endpoint:'/gateway',consentVersion:'test-v1'};
 test('Все обязательные поля проверяются',()=>{
   assert.deepEqual(Object.keys(validateApplication({})),['name','email','supervisorId','sectionId','topic','consent']);
