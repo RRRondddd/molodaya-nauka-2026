@@ -56,7 +56,7 @@ function doPost(e) {
     var receipt = Utilities.getUuid();
     // Force user text to plain text to prevent Sheets formula injection.
     function cell(value) { return "'" + value; }
-    var record = [data.requestId,receipt,payloadHash,fingerprint,new Date().toISOString(),cell(data.name.trim()),cell(data.email.trim()),data.supervisorId,data.sectionId,cell(data.topic.trim()),data.consentVersion];
+    var record = [data.requestId,receipt,payloadHash,fingerprint,new Date().toISOString(),cell(data.name.trim()),cell(data.email.trim()),data.supervisorId,data.sectionId,cell(data.topic.trim()),data.consentVersion,cell(route.name || data.supervisorId),cell(['Современный маркетинг, брендинг, реклама и PR','Медиакоммуникации, цифровые медиа и искусственный интеллект','Креативные индустрии и студенческие проекты для бизнеса'][Number(data.sectionId.slice(-1))-1]),'Новая'];
     var rowIndex = sheet.getLastRow()+1;
     sheet.getRange(rowIndex,1,1,record.length).setNumberFormat('@').setValues([record]);
     SpreadsheetApp.flush();

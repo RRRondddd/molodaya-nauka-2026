@@ -1,4 +1,4 @@
-import { supervisors } from './application-config.js';
+import { supervisors, registrationOpen } from './application-config.js';
 export function validateApplication(data) {
   const errors = {};
   if (typeof data.name !== 'string' || data.name.trim().length < 5 || data.name.length > 150) errors.name = 'Укажите ФИО: от 5 до 150 символов.';
@@ -10,7 +10,7 @@ export function validateApplication(data) {
   return errors;
 }
 export async function submitApplication(data, config, requestId, fetcher = fetch) {
-  if (config.demo || !config.approved || !config.endpoint || !config.consentVersion) throw new Error('Отправка отключена: демонстрационный режим.');
+  if (!registrationOpen(config)) throw new Error('Приём заявок онлайн скоро откроется.');
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {

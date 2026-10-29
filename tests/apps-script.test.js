@@ -15,7 +15,7 @@ function setup(){
 }
 const make=()=>({name:'Тестовый Студент Пример',email:'test@example.test',topic:'Тестовое исследование',supervisorId:'a',sectionId:'section-1',consent:true,consentVersion:'test-v1',requestId:crypto.randomUUID(),gatewaySecret:'test-secret'});
 test('Сервер изолирует маршруты и возвращает подтверждённую запись',()=>{
-  const s=setup(),a=make();assert.equal(s.send(a).status,'saved');assert.equal(s.tables.a.length,2);assert.equal(s.tables.b.length,1);
+  const s=setup(),a=make();assert.equal(s.send(a).status,'saved');assert.equal(s.tables.a.length,2);assert.equal(s.tables.b.length,1);assert.equal(s.tables.a[1][13],'Новая');assert.match(s.tables.a[1][12],/Современный маркетинг/);
   assert.equal(s.send({...make(),supervisorId:'b'}).ok,true);assert.equal(s.tables.b.length,2);
 });
 test('Сервер блокирует чужие ID, отсутствие согласия, секрет и отключённый сбор',()=>{
