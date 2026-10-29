@@ -1,11 +1,13 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+fs.mkdirSync('docs/screenshots',{recursive:true});
 const browser = await chromium.launch({
   ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
   headless: true,
 });
 try {
-  for (const width of [320, 375, 768]) {
+  for (const width of [320, 375, 768, 1440, 1920]) {
     const page = await browser.newPage({ viewport: { width, height: 740 } });
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
@@ -20,6 +22,11 @@ try {
       assert.deepEqual(outside, [], `Element overflow at ${width}`);
     };
     await checkBounds();
+    const surfaces = await page.locator('header, main > section, footer').evaluateAll(elements=>elements.map(el=>({tag:el.id||el.tagName,left:el.getBoundingClientRect().left,width:el.getBoundingClientRect().width})));
+    for(const surface of surfaces){assert.ok(Math.abs(surface.left)<1 && Math.abs(surface.width-width)<1,`Background must span viewport: ${surface.tag} at ${width}`);}
+    await page.locator('summary').first().click();assert.equal(await page.locator('details').first().getAttribute('open')!==null,true);
+    await page.locator('summary').first().click();
+    if(width<=768){
     const menu = page.getByRole('button', { name: 'Меню' });
     await menu.click();
     assert.equal(await page.locator('header nav').isVisible(), true);
@@ -30,7 +37,11 @@ try {
     await page.locator('header nav a').first().focus();
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('header nav').isVisible(), false);
+    }else{assert.equal(await page.locator('header nav').isVisible(),true);await page.locator('header nav a[href="#program"]').click();}
     for (let i=0; i<3; i++) { await page.getByRole('tab').nth(i).click(); await checkBounds(); }
+    await page.getByRole('tab').first().click();
+    await page.evaluate(()=>scrollTo(0,0));
+    await page.screenshot({path:`docs/screenshots/after-${width}.png`,fullPage:true});
     await page.getByRole('button', { name: 'Открыть помощника' }).click();
     const ask = async text => {
       await page.getByLabel('Ваш вопрос').fill(text);
