@@ -27,7 +27,7 @@ export function saveApplication(data,storage = localStorage) {
   if(Object.keys(validateApplication(data)).length) throw new Error('Проверьте обязательные поля.');
   const clean = {name:data.name.trim(), email:data.email.trim().toLowerCase(), supervisorId:data.supervisorId, sectionId:data.sectionId, topic:data.topic.trim()};
   const rows = readApplications(storage);
-  if(rows.some(x=>x.email.toLowerCase()===clean.email && x.supervisorId===clean.supervisorId && x.sectionId===clean.sectionId && x.topic.toLowerCase()===clean.topic.toLowerCase())) throw new Error('Такая заявка уже сохранена в этом браузере. Посмотрите раздел «Заявки преподавателей».');
+  if(rows.some(x=>x.email.toLowerCase()===clean.email && x.supervisorId===clean.supervisorId && x.sectionId===clean.sectionId && x.topic.toLowerCase()===clean.topic.toLowerCase())) throw new Error('Такая заявка уже сохранена в этом браузере. Повторная запись не создана.');
   if(rows.length>=1000) throw new Error('Лимит учебного хранилища достигнут. Удалите ненужные тестовые заявки.');
   const record = {...clean,id:crypto.randomUUID(),createdAt:new Date().toISOString(),status:'Новая'};
   writeApplications([...rows,record],storage);
