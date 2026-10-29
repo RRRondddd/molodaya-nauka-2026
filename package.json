@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test",
-    "test:mobile": "node scripts/check-mobile.mjs"
+    "test:mobile": "node scripts/check-mobile.mjs",
+    "test:form": "node scripts/check-form.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
