@@ -9,4 +9,8 @@ export const supervisors = [
   { id: 'shadrina', name: 'Шадрина Л. Ю.' },
 ];
 // Fail closed: enabling collection requires an approved privacy notice and backend.
-export const applicationConfig = { demo: true, approved: false, endpoint: '', consentVersion: '' };
+export const applicationConfig = { demo: true, approved: false, endpoint: '', consentVersion: '', consentUrl: '' };
+
+export function registrationOpen(config = applicationConfig) {
+  return !config.demo && config.approved && !!config.endpoint && !!config.consentVersion && /^https:\/\//.test(config.consentUrl || '');
+}
