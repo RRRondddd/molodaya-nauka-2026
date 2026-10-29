@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
 try{
- for(const width of [320,375,768,1440]){
+ for(const width of [320,375,768,1440,1920]){
   const page=await browser.newPage({viewport:{width,height:800}});let posts=0;const errors=[];
   page.on('request',r=>{if(r.method()==='POST')posts++;});page.on('pageerror',e=>errors.push(e.message));
   await page.goto(process.env.TEST_URL || 'http://localhost:4175/molodaya-nauka-2026/');
