@@ -7,7 +7,7 @@ const browser = await chromium.launch({
   headless: true,
 });
 try {
-  for (const width of [320, 375, 768, 1440, 1920]) {
+  for (const width of [320, 375, 390, 768, 1440, 1920]) {
     const page = await browser.newPage({ viewport: { width, height: 740 } });
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
@@ -25,7 +25,7 @@ try {
     assert.equal(await page.title(),'Young Science 2026 · НГУЭУ');
     assert.equal(await page.locator('#applications').count(),0);
     assert.equal(await page.locator('header').evaluate(e=>getComputedStyle(e).position),'sticky');
-    assert.match(await page.getByRole('heading',{level:1}).evaluate(e=>getComputedStyle(e).fontFamily),/Manrope/);
+    assert.match(await page.getByRole('heading',{level:1}).evaluate(e=>getComputedStyle(e).fontFamily),/Unbounded/);
     const surfaces = await page.locator('header, main > section, footer').evaluateAll(elements=>elements.map(el=>({tag:el.id||el.tagName,left:el.getBoundingClientRect().left,width:el.getBoundingClientRect().width})));
     for(const surface of surfaces){assert.ok(Math.abs(surface.left)<1 && Math.abs(surface.width-width)<1,`Background must span viewport: ${surface.tag} at ${width}`);}
     await page.locator('summary').first().click();assert.equal(await page.locator('details').first().getAttribute('open')!==null,true);
