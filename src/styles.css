@@ -61,3 +61,22 @@ header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1p
 .tab-label{min-width:0;max-width:100%;overflow-wrap:anywhere}.tabs button{min-width:0}.tabs .tab-date{min-width:0}
 
 .university-logo{display:block;width:150px;height:auto;max-height:72px;object-fit:contain;flex-shrink:0}
+/* Full month names remain readable in the existing programme cards. */
+.tabs .tab-date small{white-space:nowrap}
+.chat-backdrop{display:none}
+@media(max-width:768px){
+ .chat-backdrop{display:block;position:fixed;inset:0;z-index:39;background:#0b294866;touch-action:none}
+ .chat{--chat-vh:100dvh;--chat-top:0px;top:calc(var(--chat-top) + max(8px, var(--chat-vh) - 728px));bottom:auto;left:8px;right:8px;width:auto;height:min(720px,calc(var(--chat-vh) - 16px));max-height:calc(100dvh - 16px);max-height:calc(var(--chat-vh) - 16px);padding-bottom:env(safe-area-inset-bottom,0px);border-radius:18px;overscroll-behavior:contain;box-sizing:border-box}
+ .chat-head{padding:10px 12px;gap:8px}
+ .chat-head strong{font-size:13px}
+ .chat-head small{font-size:10px;margin-top:3px;line-height:1.4}
+ .chat-head button{min-width:44px;min-height:44px;flex-shrink:0}
+ .chat-log{flex:1 1 0;max-height:none;min-height:0;padding:12px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+ .quick-questions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding:6px 12px 10px;max-height:24%;overflow-y:auto;overscroll-behavior:contain;flex-shrink:0}
+ .quick-questions button{min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.3;padding:7px 8px;min-height:34px}
+ .chat form{margin:0 12px;min-height:44px;flex-shrink:0}
+ .chat input{font-size:16px;padding:10px;min-height:44px}
+ .chat form button{min-height:44px}
+ .chat-note{font-size:9px;line-height:1.4;margin:7px 0;padding:0 12px;flex-shrink:0}
+ body:has(.chat) .chat-trigger{visibility:hidden}
+}
