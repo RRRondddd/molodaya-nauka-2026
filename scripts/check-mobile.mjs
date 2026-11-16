@@ -50,7 +50,7 @@ try {
     await page.getByRole('tab').first().click();
     await page.evaluate(()=>scrollTo(0,0));
     await page.screenshot({path:`docs/screenshots/after-${width}.png`,fullPage:true});
-    await page.getByRole('button', { name: 'Открыть помощника' }).click();
+    await page.locator('.chat-trigger').click();
     const ask = async text => {
       await page.getByLabel('Ваш вопрос').fill(text);
       await page.getByRole('button', { name: 'Отправить вопрос' }).click();
